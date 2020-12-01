@@ -6,9 +6,6 @@ var LocalStrategy = require("passport-local").Strategy;
 var bcrypt = require("bcrypt-nodejs");
 
 /* GET users listing. */
-router.get("/test", function (req, res, next) {
-  res.json("hi");
-});
 
 passport.serializeUser(function (user, done) {
   done(null, user.userid);
@@ -53,7 +50,6 @@ passport.use(
     }
   )
 );
-
 router.post("/login", (req, res, next) => {
   console.log('login local');
   passport.authenticate("login-local", (err, user, info) => {
@@ -116,5 +112,14 @@ router.post(
     res.json('회원가입 성공')
   }
 );
+
+router.get('/logincheck', (req, res) => {
+  if(req.isAuthenticated()) {
+    res.status(200).json(req.user.userid);
+  }
+  else {
+    req.status(400).send()
+  }
+})
 
 module.exports = router;
